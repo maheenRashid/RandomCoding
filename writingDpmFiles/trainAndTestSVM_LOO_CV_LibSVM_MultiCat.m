@@ -84,7 +84,7 @@ for f_combo_no=1:numel(feature_range_cell)
         end
         svm_model = svmtrain(class_train, features_train_sparse, ...
             [' -c ', num2str(C), ' -g ',num2str(sigma), w_str,' -q -b 1']);
-        
+        return
         [class_pred, accuracy_L, dec_values_L] = svmpredict(class_test, features_test_sparse,svm_model,'-b 1');
         disp('result on testing')
         bsr=getBSR(class_pred,class_test,labs)

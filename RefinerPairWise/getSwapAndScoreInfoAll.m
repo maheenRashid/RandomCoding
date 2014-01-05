@@ -3,7 +3,7 @@ function [box_ids,swap_info,pred_scores,gt_scores]=getSwapAndScoreInfoAll(data)
 idx_keep=regexpi(data,'After repInd box\w*');
 idx_keep=find(~(cellfun(@isempty,idx_keep)));
 idx_keep_1=regexpi(data(idx_keep),'\w*: score\w*');
-idx_keep_1=find(~(cellfun(@isempty,idx_keep_1)));
+idx_keep_1=~(cellfun(@isempty,idx_keep_1));
 idx_keep=idx_keep(idx_keep_1);
 
 box_ids=zeros(numel(idx_keep),1);

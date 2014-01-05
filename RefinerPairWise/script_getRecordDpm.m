@@ -1,5 +1,5 @@
 load(fullfile('..','codeForScoresEtc','dpm_greater_-1_bbox_record_withDetections.mat'),'record');
-
+return
 record_copy=record;
 im_list=unique(record(2,:));
 
