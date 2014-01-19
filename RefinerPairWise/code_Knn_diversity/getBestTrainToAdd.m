@@ -1,4 +1,4 @@
-function [idx_add,ssd]=getBestTrainToAdd(train_pool_yet,train_pool_rest,test)
+function [idx_add,ssd,min_val]=getBestTrainToAdd(train_pool_yet,train_pool_rest,test)
 test_x=test.X;
 test_y=test.y;
 
@@ -20,16 +20,18 @@ for train_add_no=1:numel(train_rest_y)
     train_x_curr(end,:)=train_rest_x(train_add_no,:);
     
 %     sd=zeros(size(test_y));
-    IDX=knnsearch(train_x_curr,test_x);
-    ssd(train_add_no)=sum((train_y_curr(IDX)-test_y).^2);
-%     for test_no=1:numel(test_y)
-%         IDX=knnsearch(train_x_curr,test_x(test_no,:));
-%         sd(test_no)=(train_y_curr(IDX)-test_y(test_no))^2;
-%     end
-%     ssd(train_add_no)=sum(sd);
+    [IDX,D]=knnsearch(train_x_curr,test_x);
+    ssd(train_add_no)=sum(D);
+    
+%     pred=train_y_curr(IDX);
+%     pred=normc(pred);
+%     gt=normc(test_y);
+%     
+%     ssd(train_add_no)=sum((pred-gt).^2);
+    
 end
 
-[~,idx_add]=min(ssd);
+[min_val,idx_add]=min(ssd);
 
 
 end

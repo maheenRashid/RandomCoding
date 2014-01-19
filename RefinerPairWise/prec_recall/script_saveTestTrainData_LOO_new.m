@@ -52,11 +52,12 @@ for fold_no=1:numel(names_foldwise)
         ratio=[0.5,0.5];
 
         %get training and testing data in correct format
-        [feature_vecs_all,det_scores_all]=getFeaturesAndReponse...
+        [feature_vecs_all,det_scores_all]=getFeaturesAndReponse_noOrder...
             (dir_feature_vec,models_curr,ratio);
         
         [train_data,test_data]=getTrainTestData...
             (feature_vecs_all,det_scores_all,test_idx,train_idx);
+%         keyboard;
         if isempty(train_data.X)
             continue;
         end
@@ -75,7 +76,9 @@ for fold_no=1:numel(names_foldwise)
         record_data.feature_vecs_all=feature_vecs_all;
         record_data.det_scores_all=det_scores_all;
         parsave(out_file_name,record_data);
+        
     end
+    
     matlabpool close    
 end
 

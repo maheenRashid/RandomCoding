@@ -9,6 +9,9 @@ test_data.y = cell2mat(det_scores_all(test_idx))';
 train_data.X=cell2mat(feature_vecs_all(train_idx));
 train_data.y=cell2mat(det_scores_all(train_idx))';
 
+train_data.X=normr(train_data.X);
+test_data.X=normr(test_data.X);
+
 %scale data
 [train_data, test_data, ~] = scaleSVM(train_data, test_data, train_data, 0, 1);
 

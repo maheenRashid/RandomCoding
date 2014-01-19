@@ -26,7 +26,7 @@ for folder_no=1
     out_dir=fullfile(dir_parent,in_dir,'record_threshes_by_prec');
     fprintf('%s\n','getting thresholds by prec');
 %     script_getThresholds;
-    
+%     return
     load(fullfile(out_dir,'record_threshes.mat'),'record_threshes');
     prctile_vec=record_threshes.prct_vec;
     threshes=record_threshes.threshes_aft;
@@ -36,7 +36,7 @@ for folder_no=1
     prctile_str=cellfun(@(x) ['by_prec_' x],prctile_str,'UniformOutput',0);
     
     fprintf('%s\n','getting thresholded feature vecs');
-%     script_getThresholdedFeatureVecs;
+    script_getThresholdedFeatureVecs;
     
     compiled_dirs=cell(1,numel(prctile_str));
     %loop over each percentiles features
@@ -48,7 +48,7 @@ for folder_no=1
             ['record_lists_feature_vecs_' prctile_str{feature_no}]);
         out_dir=fullfile(dir_parent,in_dir,...
             ['testTrainData_LOO_ratioEqual_' prctile_str{feature_no}]);
-%                 script_saveTestTrainData_LOO_new;
+                script_saveTestTrainData_LOO_new;
         
         
         fprintf('%s\n',...
@@ -56,21 +56,21 @@ for folder_no=1
         dir_nn_loo=out_dir;
         out_dir=fullfile(dir_parent,in_dir,...
             ['results_linReg_LOO_ratioEqual_' prctile_str{feature_no}]);
-%                 script_linReg_ratioEqual_prec_recall;
+                script_linReg_ratioEqual_prec_recall;
         
         fprintf('%s\n',...
             ['get dpm accu ' prctile_str{feature_no} ' percentile']);
         dir_result=out_dir;
         out_dir=fullfile(dir_parent,in_dir,...
             ['dpm_accu_per_mod_linReg_' prctile_str{feature_no}]);
-%                 script_saveDPMAccu_prec_recall;
+                script_saveDPMAccu_prec_recall;
                 
         fprintf('%s\n',...
             ['compile prec recall ' prctile_str{feature_no} ' percentile']);
         dir_dpm_accu=out_dir;
         out_dir=fullfile(dir_parent,in_dir,...
             ['dpm_accu_compiled_linReg_' prctile_str{feature_no}]);
-%                 script_compileDPMAccu_prec_recall;
+                script_compileDPMAccu_prec_recall;
         compiled_dirs{feature_no}=out_dir;
     end
     

@@ -25,17 +25,9 @@ for thresh_no=1:numel(threshes)
         dpm_bin=record_lists.dpm_scores>=(thresh-1);
         
         %include geo score and exclude the bad dpm cols
-        dpm_bin=[true;dpm_bin];
+        dpm_bin=[true;dpm_bin];       
         
-%         sanity check. all of the excluded dpms' columsn should be zero
-%         features_t=cell2mat(features_prune');
-%         check=sum(features_t,2);
-%         if sum(check(~dpm_bin))~=0
-%             keyboard;
-%         end
-        
-        
-        
+        features_prune_bef=features_prune;
         features_prune=cellfun(@(x) x(dpm_bin),features_prune,'UniformOutput',0);
         
         %do some renaming and adding

@@ -31,7 +31,9 @@ threshes_bef=threshes;
     getPrecRecallPerThreshDpm(threshes,dpm_scores,dpm_bin,total_gt);
 
 %get the threshes for certain prec thresholds
-prct_vec=min(prec_per_thresh):0.1:max(prec_per_thresh);
+prct_vec=min(prec_per_thresh):0.05:max(prec_per_thresh);
+prct_vec(end)=max(prec_per_thresh);
+
 threshes_new=zeros(size(prct_vec));
 for prct_no=1:numel(prct_vec)
     prct_curr=prct_vec(prct_no);

@@ -1,5 +1,5 @@
 ccc
-return
+% return
 dir_parent='/lustre/maheenr/results_temp_09_13';
 folders={'swapObjectsInBox_allOffsets_sizeComparison_bugFixed_gt_refPW',...
     'swapObjectsInBox_allOffsets_sizeComparison_bugFixed_refPW'};
@@ -22,7 +22,7 @@ for folder_no=1
 %     fprintf('%s\n','getting list intersection with top 10');
 %     script_getListIntersection;
 %     fprintf('%s\n','creating dpm bin per list');
-%     script_creatingDPMBinPerList;
+    script_creatingDPMBinPerList;
 %     fprintf('%s\n','creating dpm bin per list');
 %     script_creatingDPMBinPerList;
 %     fprintf('%s\n','creating feature vecs list');
@@ -30,10 +30,10 @@ for folder_no=1
 %     fprintf('%s\n','saving test train data LOO');
 %     script_saveTestTrainData_LOO;
  
-    k=nan(1);
+%     k=nan(1);
 %     fprintf('%s %d %s\n','getting ',k,' nearest neighbours');
 %     script_nn_ratioEqual;
-    k_p_vec=0.01:0.01:0.1;
+%     k_p_vec=0.01:0.01:0.1;
 %    
 %     fprintf('%s %d %s\n','getting kpvec nearest neighbours');
 %     script_temp_checkingKNN;
@@ -53,10 +53,10 @@ for folder_no=1
 %     script_compilingAccuracies;
 %     dirs_str={'linReg_LOO'};
 
-    dirs_str=cellfun(@(x) [num2str(x) '_nn_LOO'],...
-        num2cell(k_p_vec),'UniformOutput',0);
-    dirs_str=[dirs_str 'linReg_LOO'];
-    script_writeBestLists;
+%     dirs_str=cellfun(@(x) [num2str(x) '_nn_LOO'],...
+%         num2cell(k_p_vec),'UniformOutput',0);
+%     dirs_str=[dirs_str 'linReg_LOO'];
+%     script_writeBestLists;
 
 % script_compilingAccuracies_diff;
 end

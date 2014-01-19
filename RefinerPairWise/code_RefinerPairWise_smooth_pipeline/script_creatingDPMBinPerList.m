@@ -59,7 +59,7 @@ parfor model_no=1:numel(models)
     
     record_lists.accuracy=cell_accuracy;
     record_lists.dpm_scores=record_dpm_curr.boxes(:,end);
-    
+    record_lists.cat_nos=record_dpm_curr.cat_no;
     parsave(out_file_name,record_lists);
     
 end

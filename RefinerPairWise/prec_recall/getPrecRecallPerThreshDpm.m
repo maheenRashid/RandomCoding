@@ -14,9 +14,11 @@ for thresh_no=1:numel(threshes)
     dpm_scores_t=cellfun(@(x) x(x>=thresh),dpm_scores,'UniformOutput',0);
     dpm_bin_t=cellfun(@(x,y) x(y>=thresh),dpm_bin,dpm_scores,'UniformOutput',0);
     empty_bin=cellfun(@isempty,dpm_bin_t);
-    ratio_correct(:,empty_bin)=[];
+%     ratio_correct(:,empty_bin)=[];
+    ratio_correct(1,empty_bin)=0;
     
     dpm_bin_t=dpm_bin_t(~empty_bin);
+    empty_idx_map=find(~empty_bin);
     
     prec_correct=zeros(2,numel(dpm_bin_t));
     prec_correct(2,:)=cellfun(@numel,dpm_bin_t);
@@ -27,7 +29,8 @@ for thresh_no=1:numel(threshes)
         curr=dpm_bin_t{dpm_bin_no};
         curr=unique(curr);
         curr(curr==0)=[];
-        ratio_correct(1,dpm_bin_no)=numel(curr);
+        ratio_correct(1,empty_idx_map(dpm_bin_no))=numel(curr);
+%         ratio_correct(1,dpm_bin_no)=numel(curr);
     end
     
     recall_per_thresh(thresh_no)=sum(ratio_correct(1,:))/sum(ratio_correct(2,:));

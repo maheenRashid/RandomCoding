@@ -1,5 +1,52 @@
 ccc
+load('b#bedroom#sun_aaajwnfblludyasb');
 
+prct=0.05:0.05:1;
+valid_data_size=0.05;
+[perf_test,dist_test,perf_rand,dist_rand]=...
+    getSeqOptPerformance(record_lists,prct,valid_data_size);
+
+figure; subplot(211); plot(prct,dist_test);
+subplot(212);plot(prct,perf_test);
+
+figure; subplot(211); plot(prct,dist_rand);
+subplot(212);plot(prct,perf_rand);
+
+
+return
+load('diverse_order');
+
+figure; subplot(211);plot(dist); subplot(212);plot(perf);
+
+prct=0.05:0.05:1;
+perf_test=zeros(1,numel(prct));
+dist_test=zeros(1,numel(prct));
+
+figure;
+for i=1:numel(prct)
+    train_curr=train_data;
+    k=round(numel(idx_div)*prct(i));
+    train_curr.X=train_curr.X(idx_div(1:k),:);
+    train_curr.y=train_curr.y(idx_div(1:k));
+    [IDX,D]=knnsearch(train_curr.X,test_data.X);
+    
+    gt_y=test_data.y;
+    pred_y=train_curr.y(IDX);
+    
+    perf_test(i)=sum((test_data.y-train_curr.y(IDX)).^2);
+    dist_test(i)=sum(D);
+    
+    subplot(1,numel(prct),i)
+    plot(pred_y,'or');hold on; plot(gt_y,'*b');
+    
+end
+
+figure; subplot(211); plot(prct,dist_test);
+subplot(212);plot(prct,perf_test);
+
+
+
+return
 addpath(fullfile('..','..','svm_files'));
 
 load('b#bedroom#sun_aaajwnfblludyasb');
@@ -26,89 +73,14 @@ train_idx=record_lists.train_idx(temp(count_valid+1:end));
 [~,valid_data]=whitenData(train_data,valid_data);
 train_data=train_data1;
 
-tic();
-[IDX,D]=knnsearch(train_data.X,valid_data.X,'K',size(train_data.X,1));
-toc();
+% lim=500;
+% train_data.X=train_data.X(1:lim,:);
+% train_data.y=train_data.y(1:lim);
 
-IDX_sort=zeros(size(IDX));
-D_sort=zeros(size(IDX));
-sort_idx=zeros(size(IDX));
-for i=1:size(IDX,1)
-    [IDX_sort(i,:),sort_idx(i,:)]=sort(IDX(i,:));
-    D_sort(i,:)=D(i,sort_idx(i,:));
-end
+% [idx_div,dist,perf]=getDiverseOrdering(train_data,valid_data);
 
-IDX=IDX_sort;
-D=D_sort;
 
-d_pool=zeros(size(D,1),0);
-y_pool=zeros(0,1);
+figure; subplot(211);plot(dist); subplot(212);plot(perf);
 
-d_rest=D;
-y_rest=train_data.y;
-
-y_test=valid_data.y;
-ssd_rec=zeros(size(d_rest,2),1);
-idx_rec=zeros(size(d_rest,2),1);
-
-d_min_yet=zeros(size(d_pool,1),0);
-
-idx_min_yet=zeros(size(d_pool,1),1);
-
-for i=1:size(d_rest,2)
-%     if i>1
-%         keyboard
-%     end
-    fprintf('i: %d\n',i);
-    
-    y_curr=[y_pool;0];
-%     d_curr=[d_min_yet,
-    d_curr=[d_pool,zeros(size(d_pool,1),1)];
-    
-%     fprintf('min\n');
-%         tic()
-%         
-    ssd_rest=zeros(size(d_rest,2),1);
-    for j=1:size(d_rest,2)
-        d_curr(:,end)=d_rest(:,j);
-        y_curr(end)=y_rest(j);
-        [~,idx_curr]=min(d_curr,[],2);
-        
-        if i>1
-            keyboard;
-        end
-        
-        
-            idx_actual=idx_curr;
-%         if i~=1
-%             idx_actual(idx_curr==1)=idx_min_yet(idx_curr==1);
-%             idx_actual(idx_curr==2)=numel(y_curr);
-%         end
-        
-        y_pred=y_curr(idx_actual);
-        ssd_rest(j)=sum((y_pred-y_test).^2);
-    
-    end
-%     toc()
-    [min_ssd,min_idx]=min(ssd_rest);
-
-    ssd_rec(i)=min_ssd;
-    idx_rec(i)=min_idx;
-    
-%     fprintf('dpool\n');
-%     tic()
-    d_pool=[d_pool,d_rest(:,min_idx)];
-    y_pool=[y_pool;y_rest(min_idx)];
-%     toc()
-    
-%     fprintf('drest\n');
-%     tic()
-    d_rest(:,min_idx)=[];
-    y_rest(min_idx)=[];
-%     toc()
-    
-    [d_min_yet,idx_min_yet]=min(d_pool,[],2);
-    
-end
 
 

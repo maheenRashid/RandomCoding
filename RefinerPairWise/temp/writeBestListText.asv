@@ -1,0 +1,27 @@
+function [record_path_nn_text]=writeBestListText(dir_lists,dir_results,out_dir)
+
+mod_files=dir(fullfile(dir_results,'*.mat'));
+mod_files={mod_files(:).name};
+
+
+record_path_nn_text=struct('mod_name',cell(1,numel(mod_files)),'paths_nn',cell(1,numel(mod_files)));
+
+matlabpool open
+parfor mod_no=1:numel(mod_files)
+    model_name=regexpi(mod_files{mod_no},'[.]','split');
+    model_name=model_name{1};
+    nn_lists=load(fullfile(dir_lists,mod_files{mod_no}));
+    nn_lists=nn_lists.record_lists.lists;
+    out_file_name=fullfile(out_dir,[model_name '.txt']);
+    nn_results=load(fullfile(dir_results,mod_files{mod_no}));
+    nn_results.
+    writeLists(out_file_name,nn_lists,,);
+    record_path_nn_text(mod_no).mod_name=model_name;
+    record_path_nn_text(mod_no).paths_nn=out_file_name;
+end
+matlabpool close;
+
+
+
+
+end
