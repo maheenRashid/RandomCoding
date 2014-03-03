@@ -15,8 +15,14 @@ function [ cellCommands ] = createCellCommands_neighbours( record_path_nn_text,c
         cell_struct(mod_no).cellCommands=createRenderListsMat(cellCommands_rel,c_file_to_run,...
             path_to_text,paths_nn,out_dirs_curr,file);
     end
-    cellCommands=[cell_struct(:).cellCommands];
-    cellCommands=cellCommands(:);
+    
+    cellCommands=cell(1,0);
+    cell_temp={cell_struct(:).cellCommands};
+    for i=1:numel(cell_temp)
+        cellCommands=[cellCommands;cell_temp{i}];
+    end
+%     cellCommands=[cell_struct(:).cellCommands];
+%     cellCommands=cellCommands(:);
 %     save(fullfile(out_dir,[out_name '.mat']),'cellCommands');
 %     mat_files=[mat_files fullfile(out_dir,out_name)];
 

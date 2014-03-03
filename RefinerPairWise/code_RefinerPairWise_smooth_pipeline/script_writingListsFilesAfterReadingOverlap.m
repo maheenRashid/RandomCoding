@@ -1,9 +1,13 @@
 ccc
 
 
-dir_parent='/home/maheenr/results_temp_09_13';
-folders={'swapAllCombos_unique_10_auto_writeFloorOverlap',...
-    'swapAllCombos_unique_10_gt_writeFloorOverlap'};
+% dir_parent='/home/maheenr/results_temp_09_13';
+% folders={'swapAllCombos_unique_10_auto_writeFloorOverlap',...
+%     'swapAllCombos_unique_10_gt_writeFloorOverlap'};
+
+
+dir_parent='/lustre/maheenr/3dgp_results';
+folders={'swap_in_box_auto_floorOverlap'};
 
 
 timeout=15*60;

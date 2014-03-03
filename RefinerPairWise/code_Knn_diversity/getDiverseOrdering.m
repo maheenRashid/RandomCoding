@@ -23,6 +23,10 @@ y_pool=zeros(0,1);
 d_rest=D;
 y_rest=train_data.y;
 
+%%%
+idx_rec_meta=1:numel(y_rest);
+%%%
+
 y_test=valid_data.y;
 ssd_rec=zeros(size(d_rest,2),1);
 idx_rec=zeros(size(d_rest,2),1);
@@ -45,8 +49,12 @@ for i=1:size(d_rest,2)
     
     dist_rec(i)=min_d_rest(min_idx);
     ssd_rec(i)=min_ssd;
-    idx_rec(i)=min_idx;
+%     idx_rec(i)=min_idx;
 
+    %%%
+    idx_rec(i)=idx_rec_meta(min_idx);
+    %%%
+    
     y_pool=[y_pool;y_rest(min_idx)];
     
     [d_min_yet,idx_temp]=min([d_min_yet,d_rest(:,min_idx)],[],2);
@@ -60,6 +68,9 @@ for i=1:size(d_rest,2)
     d_rest(:,min_idx)=[];
     y_rest(min_idx)=[];
     
+    %%%
+    idx_rec_meta(min_idx)=[];
+    %%%
 end
 
 

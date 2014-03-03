@@ -1,5 +1,4 @@
 function record_lists=getDistanceAllPoints(record_lists)
-
 train_data=record_lists.train_data;
 test_data=record_lists.test_data;
 svm_vecs_curr=test_data.X;

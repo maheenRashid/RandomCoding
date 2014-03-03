@@ -20,7 +20,7 @@ for i=1:numel(names)
     pr_c_struct=setfield(pr_c_struct,names{i},temp);
 end
 
-save(fullfile(out_dir,'curves_data'),'pr_c_struct');
+save(fullfile(out_dir,'curves_data'),'pr_c_struct','compiled_dirs');
 
 names=fieldnames(prec_recall);
 names=names(2:end);

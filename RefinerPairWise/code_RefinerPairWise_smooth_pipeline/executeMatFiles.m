@@ -5,8 +5,6 @@ function executeMatFiles( folders )
 for folder_no=1:numel(folders)
     folder=folders{folder_no};
     load([folder '.mat'],'cellCommands');
-%     folder
-%     continue
     for i=1:numel(cellCommands)
         currDir=regexpi(cellCommands{i},' ','split');
         currDir=currDir{3};

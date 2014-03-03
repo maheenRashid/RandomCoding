@@ -1,8 +1,10 @@
 ccc
 
-prctile_str='by_prec_withCat_noOrder_0.10109';
-
-for k_no=0.1:0.1:1
+for div_no=[0.05,0.5,1]
+prctile_str=['by_prec_withCat_0.10109_diversity_' num2str(div_no) '_question'];
+% prctile_str='by_prec_withCat_0.10109'
+for k_no=0.01
+%     [0.01:0.01:0.09]
     out_dir_rendering=['K_' num2str(k_no) '_' prctile_str];
     params.dir_model=out_dir_rendering;
     params.dir_n=[out_dir_rendering '_neighbours'];
@@ -15,4 +17,5 @@ for k_no=0.1:0.1:1
     params.str_post_nn={'_overlay'};
     params.html_name='results_nn.html';
     writeHTML(params,1)
+end
 end

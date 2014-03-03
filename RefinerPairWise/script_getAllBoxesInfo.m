@@ -1,9 +1,14 @@
 ccc
 
-dir_parent='/lustre/maheenr/results_temp_09_13';
+% dir_parent='/lustre/maheenr/results_temp_09_13';
+% 
+% folders={'swapObjectsInBox_allOffsets_sizeComparison_bugFixed_gt','swapObjectsInBox_allOffsets_sizeComparison_bugFixed'};
 
-folders={'swapObjectsInBox_allOffsets_sizeComparison_bugFixed_gt','swapObjectsInBox_allOffsets_sizeComparison_bugFixed'};
 
+
+dir_parent='/lustre/maheenr/3dgp_results';
+
+folders={'swap_in_box_auto'};
 
 
 for folder_no=1:numel(folders)

@@ -9,22 +9,27 @@ folder_type={'gt','auto'};
 n=3;
 
 feature_pre='record_lists_feature_vecs_withCat';
-prctile_pre='by_prec_withCat_noOrder';
+% prctile_pre='by_prec_withCat_noOrder';
+prctile_pre='by_prec_withCat';
 prctile_pre_feature='by_prec_withCat';
 
 prctile_inc=0.1;
-k_vec=0.01:0.01:0.09;
+k_vec=0.01;
+% :0.01:0.09;
 v_no=5;
 
 path_to_cellCommands=cell(1,0);
 path_to_cellCommands_neighbours=cell(1,0);
 
+
 for folder_no=1
     %     :numel(folders)
     folder=folders{folder_no};
-    in_dir=['swapAllCombos_unique_' num2str(n) '_' folder_type{folder_no} ...
+    in_dir_old=['swapAllCombos_unique_' num2str(n) '_' folder_type{folder_no} ...
         '_writeAndScoreLists_html'];
-    dir_in_meta=fullfile(dir_parent,in_dir);
+
+    in_dir='diversity_question';
+    dir_in_meta=fullfile(dir_parent,in_dir_old);
     
     %create percentile strings and in out dirs
     feature_dir=fullfile(dir_in_meta,feature_pre);
@@ -33,14 +38,28 @@ for folder_no=1
     prctile_vec=record_threshes.prct_vec;
     threshes=record_threshes.threshes_aft;
     
+    prctile_vec=0.10109;
+
+    %if you want to switch to no diversity, uncomment
     prctile_str=cellfun(@num2str,num2cell(prctile_vec),'UniformOutput',0);
-    prctile_str_feat=cellfun(@(x) [prctile_pre_feature '_' x]...
-        ,prctile_str,'UniformOutput',0);
+%     prctile_str_feat=cellfun(@(x) [prctile_pre_feature '_' x]...
+%         ,prctile_str,'UniformOutput',0);
     prctile_str=cellfun(@(x) [prctile_pre '_' x],prctile_str,'UniformOutput',0);
     
     
+    %diversity specific
+    div_prct_vec=[0.05,0.5,1];
+    div_prct_str=cellfun(@num2str,num2cell(div_prct_vec),'UniformOutput',0);
+    
+    temp=[prctile_str{1}];
+    prctile_str_feat=cell(size(div_prct_str));
+    [prctile_str_feat{:}]=deal(temp);
+    
+    prctile_str=cellfun(@(x) [prctile_str{1} '_diversity_' x],div_prct_str,...
+                'UniformOutput',0);
+
     for k=k_vec
-        dir_in_k=fullfile(dir_in_meta,['KNN_' num2str(k) '_LOO_ratioEqual']);
+        dir_in_k=fullfile(dir_parent,in_dir,['KNN_' num2str(k) '_LOO_ratioEqual']);
         
         if ~exist(dir_in_k,'dir')
             mkdir(dir_in_k);
@@ -49,8 +68,7 @@ for folder_no=1
         compiled_dirs=cell(1,numel(prctile_str));
         
         %loop over each percentiles features
-        for feature_no=1
-            %             :numel(prctile_str)
+        for feature_no=1:numel(prctile_str)
             
             out_dir_mats=fullfile(dir_in_k,['mats_for_rendering_' prctile_str{feature_no}]);
             if ~exist(out_dir_mats,'dir')
@@ -69,7 +87,7 @@ for folder_no=1
             load([folder_type{folder_no} '_cellCommands_struct.mat']);
             
             path_to_bestList=out_dir;
-            out_dir_rendering=['K_' num2str(k) '_' prctile_str{feature_no}];
+            out_dir_rendering=['K_' num2str(k) '_' prctile_str{feature_no} '_question'];
             cellCommands=createRenderListsMat(params, path_to_bestList, out_dir_rendering);
             mat_file=fullfile(out_dir_mats,out_dir_rendering);
             save([mat_file '.mat'],'cellCommands');
@@ -87,6 +105,9 @@ for folder_no=1
             
         end
     end
-    save('path_to_cellCommands_best_list.mat','path_to_cellCommands');
-    save('path_to_cellCommands_best_list_neighbours.mat','path_to_cellCommands_neighbours');
+%     save('path_to_cellCommands_best_list.mat','path_to_cellCommands');
+%     save('path_to_cellCommands_best_list_neighbours.mat','path_to_cellCommands_neighbours');
+
+    save('path_to_cellCommands_best_list_diversity.mat','path_to_cellCommands');
+    save('path_to_cellCommands_best_list_neighbours_diversity.mat','path_to_cellCommands_neighbours');
 end

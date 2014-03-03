@@ -36,19 +36,22 @@ parfor file_no=1:numel(files)
     temp=load(fullfile(feature_dir,files{file_no}));
     record_lists=temp.record_lists;
     
-    [perf_seq_opt,dist_seq_opt,perf_rand,dist_rand]=...
-    getSeqOptPerformance(record_lists,prct_vec,valid_data_size);
+%     [perf_seq_opt,dist_seq_opt,perf_rand,dist_rand]=...
+%     getSeqOptPerformance(record_lists,prct_vec,valid_data_size);
+    
+    [record_performance]=getSeqOptPerformance(record_lists,prct_vec,valid_data_size);
 
+    
     perf_seq_opt_all(file_no,:)=perf_seq_opt;
     perf_rand_all(file_no,:)=perf_rand;
     
-    record_performance=struct();
-    record_performance.perf_seq_opt=perf_seq_opt;
-    record_performance.dist_seq_opt=dist_seq_opt;
-    record_performance.dist_rand=dist_rand;
-    record_performance.perf_rand=perf_rand;
-    record_performance.valid_data_size=valid_data_size;
-    record_performance.prct_vec=prct_vec;
+%     record_performance=struct();
+%     record_performance.perf_seq_opt=perf_seq_opt;
+%     record_performance.dist_seq_opt=dist_seq_opt;
+%     record_performance.dist_rand=dist_rand;
+%     record_performance.perf_rand=perf_rand;
+%     record_performance.valid_data_size=valid_data_size;
+%     record_performance.prct_vec=prct_vec;
     
     out_file_name=fullfile(out_dir,files{file_no});
     parsave(out_file_name,record_performance);

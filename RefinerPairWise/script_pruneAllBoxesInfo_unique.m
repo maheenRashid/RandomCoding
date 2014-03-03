@@ -1,16 +1,19 @@
 ccc
 
-dir_parent='/lustre/maheenr/results_temp_09_13';
+% dir_parent='/lustre/maheenr/results_temp_09_13';
+% 
+% folders={'swapObjectsInBox_allOffsets_sizeComparison_bugFixed_gt_refPW','swapObjectsInBox_allOffsets_sizeComparison_bugFixed_refPW'};
 
-folders={'swapObjectsInBox_allOffsets_sizeComparison_bugFixed_gt_refPW','swapObjectsInBox_allOffsets_sizeComparison_bugFixed_refPW'};
+dir_parent='/lustre/maheenr/3dgp_results';
 
+folders={'swap_in_box_auto_refPW'};
 
 
 for folder_no=1:numel(folders)
     folder=folders{folder_no};
     load(fullfile(dir_parent,folder,'record_box_info_all.mat'),'record_box_info_all');
 %     n=10;
-    n=2;
+    n=3;
     temp=cell(1,numel(record_box_info_all));
     record_box_info_all_copy=struct('id',temp,'box_ids',temp,'swap_info',temp,'pred_scores',temp,'gt_scores',temp);
     matlabpool open;
