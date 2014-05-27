@@ -1,11 +1,14 @@
 
-load(fullfile('..','record_dpm.mat'));
 
-in_dir=['swapAllCombos_unique_' num2str(n) '_' folder_type{folder_no} ...
-    '_writeAndScoreLists_html'];
+%commented out so that script_met_stage_1_noC can be run for 3dgp cuboids
+%     load(fullfile('..','record_dpm.mat'));
+% in_dir=['swapAllCombos_unique_' num2str(n) '_' folder_type{folder_no} ...
+%     '_writeAndScoreLists_html'];
+
+
 dir_lists=fullfile(dir_parent,in_dir,'record_lists');
 
-out_dir=fullfile(dir_parent,in_dir,'record_lists_dpm_bin');
+out_dir=fullfile(dir_parent,in_dir,'record_lists_dpm_bin')
 if ~exist(out_dir,'dir')
     mkdir(out_dir);
 end
@@ -16,14 +19,28 @@ models=cellfun(@(x) x(1:end-4),models,'UniformOutput',0);
 
 ids_dpm={record_dpm(:).id};
 
+load('lists_to_read_again.mat','ids_rerun');
+% models=setdiff(models,ids_rerun);
+models=ids_rerun;
 
-matlabpool open
-parfor model_no=1:numel(models)
-    
+% return
+% matlabpool open
+% par
+for model_no=1:numel(models)
+    fprintf('%d of %d\n',model_no,numel(models));
+    out_mutex=fullfile(out_dir,models{model_no});
+    if ~exist(out_mutex,'dir')
+        mkdir(out_mutex)
+    else
+        fprintf('continuing\n');
+        continue
+    end
     
     temp=load(fullfile(dir_lists,[models{model_no} '.mat']));
     record_lists=temp.record_lists;
-    
+    if isempty(record_lists.lists)
+        continue
+    end
     id=models{model_no};
     id=regexpi(id,'#','split');
     id=id{end};
@@ -60,7 +77,8 @@ parfor model_no=1:numel(models)
     record_lists.accuracy=cell_accuracy;
     record_lists.dpm_scores=record_dpm_curr.boxes(:,end);
     record_lists.cat_nos=record_dpm_curr.cat_no;
+  
     parsave(out_file_name,record_lists);
     
 end
-matlabpool close;
+% matlabpool close;

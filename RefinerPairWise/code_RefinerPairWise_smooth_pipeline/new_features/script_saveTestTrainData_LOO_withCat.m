@@ -1,6 +1,6 @@
 
-in_dir=['swapAllCombos_unique_' num2str(n) '_' folder_type{folder_no} ...
-    '_writeAndScoreLists_html'];
+% in_dir=['swapAllCombos_unique_' num2str(n) '_' folder_type{folder_no} ...
+%     '_writeAndScoreLists_html'];
 
 addpath(fullfile('..','..','svm_files'));
 
@@ -46,28 +46,37 @@ for fold_no=1:numel(names_foldwise)
     fold_no
     models_curr=names_foldwise{fold_no};
     %temp for testing
-%     models_curr=models_curr(1:5);
-    matlabpool open
-    parfor test_idx=1:numel(models_curr)
-     
+    %     models_curr=models_curr(1:5);
+    %     matlabpool open
+    %     par
+    for test_idx=1:numel(models_curr)
+        
         train_idx=1:numel(models_curr);
         train_idx(test_idx)=[];
+        
+        out_mutex_name=fullfile(out_dir,models_curr{test_idx})
+        if ~exist(out_mutex_name,'dir')
+            mkdir(out_mutex_name)
+        else
+            continue
+        end
+        
         
         out_file_name=fullfile(out_dir,[models_curr{test_idx} '.mat']);
         
         %set ratio
         ratio=[0.5,0.5];
-
+        
         %get training and testing data in correct format
-%         disp('getting features and reponse')
+        %         disp('getting features and reponse')
         [feature_vecs_all,det_scores_all]=getFeaturesAndReponse...
             (dir_feature_vec,models_curr,ratio);
         
-%         disp('getting train test data')
+        %         disp('getting train test data')
         [train_data,test_data]=getTrainTestData...
             (feature_vecs_all,det_scores_all,test_idx,train_idx);
-
-         
+        
+        
         %save
         record_data=struct();
         record_data.models_curr=models_curr;
@@ -80,6 +89,6 @@ for fold_no=1:numel(names_foldwise)
         record_data.det_scores_all=det_scores_all;
         parsave(out_file_name,record_data);
     end
-    matlabpool close    
+    %     matlabpool close
 end
 

@@ -11,11 +11,24 @@ for thresh_no=1:numel(threshes)
         mkdir(out_dir)
     end
     
-    matlabpool open
-    parfor mat_no=1:numel(features_mat)
+    %     keyboard;
+    %     matlabpool open
+    %     par
+    for mat_no=1:numel(features_mat)
+        fprintf('%d\n',mat_no);
+        %create vector_features
+        out_file_name=fullfile(out_dir,features_mat{mat_no});
+        
+        out_mutex=fullfile(out_dir,features_mat{mat_no}(1:end-4));
+        
+        if ~exist(out_mutex)
+            mkdir(out_mutex);
+        else
+            continue;
+        end
+        
         record_lists=load(fullfile(feature_dir,features_mat{mat_no}));
         record_lists=record_lists.record_lists;
-        %create vector_features
         
         %step one. remove the feature vecs
         [features_prune,lists_bin]=...
@@ -25,7 +38,7 @@ for thresh_no=1:numel(threshes)
         dpm_bin=record_lists.dpm_scores>=(thresh-1);
         
         %include geo score and exclude the bad dpm cols
-        dpm_bin=[true;dpm_bin];       
+        dpm_bin=[true;dpm_bin];
         
         features_prune_bef=features_prune;
         features_prune=cellfun(@(x) x(dpm_bin),features_prune,'UniformOutput',0);
@@ -37,9 +50,8 @@ for thresh_no=1:numel(threshes)
         record_lists.lists_thresh_bin=lists_bin;
         
         %save
-        out_file_name=fullfile(out_dir,features_mat{mat_no});
         parsave(out_file_name,record_lists);
-        
+        %         return
     end
-    matlabpool close;
+    %     matlabpool close;
 end

@@ -1,9 +1,9 @@
-ccc
+% ccc
 load('record_dpm.mat');
 
 
-dir_parent='/home/maheenr/results_temp_09_13';
-folder='swapAllCombos_unique_10_gt_writeAndScoreLists';
+% dir_parent='/home/maheenr/results_temp_09_13';
+% folder='swapAllCombos_unique_10_gt_writeAndScoreLists';
 
 dir_lists=fullfile(dir_parent,[folder '_html'],'record_lists');
 out_dir=fullfile(dir_parent,[folder '_html'],'record_lists_dpm_bin');

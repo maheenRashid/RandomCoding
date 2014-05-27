@@ -7,7 +7,7 @@ ccc
 
 
 dir_parent='/lustre/maheenr/3dgp_results';
-folders={'swap_in_box_auto_floorOverlap'};
+folders={'swap_in_box_auto_new_floorOverlap_1'};
 
 
 timeout=15*60;

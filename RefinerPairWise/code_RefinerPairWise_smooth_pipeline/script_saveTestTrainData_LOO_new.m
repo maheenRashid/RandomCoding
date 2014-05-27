@@ -1,13 +1,13 @@
 %difference with _LOO.m is that this includes whitening. 
 
 
-in_dir=['swapAllCombos_unique_' num2str(n) '_' folder_type{folder_no} ...
-    '_writeAndScoreLists_html'];
+% in_dir=['swapAllCombos_unique_' num2str(n) '_' folder_type{folder_no} ...
+%     '_writeAndScoreLists_html'];
 
 addpath(fullfile('..','..','svm_files'));
 
 %get model names
-dir_feature_vec=fullfile(dir_parent,in_dir,'record_lists_feature_vecs');
+% dir_feature_vec=fullfile(dir_parent,in_dir,'record_lists_feature_vecs');
 
 models=dir(fullfile(dir_feature_vec,'*.mat'));
 models={models(:).name};
@@ -49,10 +49,19 @@ for fold_no=1:numel(names_foldwise)
     models_curr=names_foldwise{fold_no};
     %temp for testing
 %     models_curr=models_curr(1:5);
-    matlabpool open
-    parfor test_idx=1:numel(models_curr)
+%     matlabpool open
+%     par
+    for test_idx=1:numel(models_curr)
+        test_idx
         train_idx=1:numel(models_curr);
         train_idx(test_idx)=[];
+        
+        out_mutex=fullfile(out_dir,models_curr{test_idx});
+        if ~exist(out_mutex,'dir')
+            mkdir(out_mutex)
+        else
+            continue
+        end
         
         out_file_name=fullfile(out_dir,[models_curr{test_idx} '.mat']);
 %         if exist(out_file_name,'file')
@@ -86,6 +95,6 @@ for fold_no=1:numel(names_foldwise)
         record_data.det_scores_all=det_scores_all;
         parsave(out_file_name,record_data);
     end
-    matlabpool close    
+%     matlabpool close    
 end
 

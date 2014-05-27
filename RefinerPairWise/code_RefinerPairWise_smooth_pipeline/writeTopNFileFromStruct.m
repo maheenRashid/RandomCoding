@@ -8,6 +8,11 @@ boxes=record.swap_info;
 if keepNothing==0
     idx=pruneDetWorseThanNothing(record);
     boxes=boxes(idx,:);
+else
+    box_ids=record.box_ids;
+    pred_scores=record.pred_scores;
+    idx_nothing=box_ids==-1;
+    boxes=boxes(~idx_nothing,:);
 end 
 
 
@@ -30,5 +35,4 @@ function idx=pruneDetWorseThanNothing(record)
     idx_nothing=box_ids==-1;
     pred_nothing=pred_scores(idx_nothing);
     idx=find(pred_scores>pred_nothing);
-
 end

@@ -1,8 +1,13 @@
 ccc
-% return
+
 dir_parent='/lustre/maheenr/results_temp_09_13';
 folders={'swapObjectsInBox_allOffsets_sizeComparison_bugFixed_gt_refPW',...
     'swapObjectsInBox_allOffsets_sizeComparison_bugFixed_refPW'};
+
+dir_parent='/lustre/maheenr/3dgp_results';
+% folders={'swap_in_box_auto_listsScores_1'};
+folders={'swap_in_box_auto_new_listsScores_1'};
+rec_path='/lustre/maheenr/new_3dgp/indoorunderstanding_3dgp-master';
 
 folder_type={'gt','auto'};
 
@@ -14,15 +19,28 @@ c_file_to_run='writeFloorOverlap';
 
 for folder_no=1
 %         :numel(folders)
-    folder=folders{folder_no};
+    folder=folders{folder_no}
 %     fprintf('%s\n','writing top n record mat files');
 %     script_pruneAllBoxesInfo_Unique;
-%     fprintf('%s\n','getting mapping with top 10');
+%     out_dir
+    fprintf('%s\n','getting mapping with top 10');
 %     script_getIntersectionTopX;
-%     fprintf('%s\n','getting list intersection with top 10');
+%     out_dir
+    fprintf('%s\n','getting list intersection with top 10');
 %     script_getListIntersection;
-%     fprintf('%s\n','creating dpm bin per list');
+%     out_dir
+    fprintf('%s\n','creating dpm bin per list');
+
+    
+    
+    in_dir=[folder '_html'];
+%     load (fullfile(rec_path,'record_dpm_with_dets_room.mat'));
+    load (fullfile(rec_path,'record_dpm_new.mat'));
     script_creatingDPMBinPerList;
+    
+    
+    
+%     out_dir
 %     fprintf('%s\n','creating dpm bin per list');
 %     script_creatingDPMBinPerList;
 %     fprintf('%s\n','creating feature vecs list');

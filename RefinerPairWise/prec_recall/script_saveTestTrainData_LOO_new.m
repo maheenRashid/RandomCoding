@@ -35,30 +35,36 @@ for i=1:numel(fold_nos)
     names_foldwise{i}=gt_list(gt_folds==fold_nos(i));
 end
 
-
 %iterate over each set
 for fold_no=1:numel(names_foldwise)
     fold_no
-    models_curr=names_foldwise{fold_no};
-
-    matlabpool open
-    parfor test_idx=1:numel(models_curr)
+    out_mutex=fullfile(out_dir,num2str(fold_no));
+    load(fullfile(out_mutex,[num2str(fold_no) '.mat']));
+    
+    
+%     matlabpool open
+%     par
+    for test_idx=1:numel(models_curr)
+        fprintf('test_idx %d\n',test_idx);
         train_idx=1:numel(models_curr);
         train_idx(test_idx)=[];
         
+        out_mutex=fullfile(out_dir,[models_curr{test_idx}]);
+        if ~exist(out_mutex,'dir')
+            mkdir(out_mutex);
+        else
+            continue;
+        end
+        
         out_file_name=fullfile(out_dir,[models_curr{test_idx} '.mat']);
         
-        %set ratio
-        ratio=[0.5,0.5];
-
-        %get training and testing data in correct format
-        [feature_vecs_all,det_scores_all]=getFeaturesAndReponse_noOrder...
-            (dir_feature_vec,models_curr,ratio);
-        
+        save('temp_test_Train_sparse.mat');
+        return
         [train_data,test_data]=getTrainTestData...
             (feature_vecs_all,det_scores_all,test_idx,train_idx);
-%         keyboard;
+        %         keyboard;
         if isempty(train_data.X)
+            fprintf('empty train_data \n');
             continue;
         end
         
@@ -78,8 +84,7 @@ for fold_no=1:numel(names_foldwise)
         parsave(out_file_name,record_data);
         
     end
-    
-    matlabpool close    
+%     matlabpool close
 end
 
 rmpath(fullfile('..','..','svm_files'));

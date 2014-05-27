@@ -1,19 +1,23 @@
 
-models=dir(fullfile(dir_result,'*.mat'));
-models={models(:).name};
-
 if ~exist(out_dir,'dir')
     mkdir(out_dir);
+else
+    return;
 end
 
+models=dir(fullfile(dir_result,'*.mat'));
+models={models(:).name};
 
 tmp=cell(1,numel(models));
 prec_recall=struct('id',tmp,'dpm',tmp,'nn_dpm',tmp,'nn_dpm_best',tmp);
 
 for model_no=1:numel(models)
     
-
-load(fullfile(dir_dpm_accu,models{model_no}));
+fname=fullfile(dir_dpm_accu,models{model_no});
+if ~exist(fname,'file')
+    continue;
+end
+load(fname);
 prec_recall(model_no)=getPrecRecallStruct(prec_recall(model_no),record_accuracy);
 prec_recall(model_no).id=models{model_no};
 

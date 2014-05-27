@@ -1,40 +1,58 @@
-function [feature_vecs_all,det_scores_all]=getFeaturesAndReponse_noOrder(dir_in,models,ratio)
+function [features_all,det_scores_all,error_files]=getFeaturesAndReponse_noOrder(dir_in,models,ratio)
 
-feature_vecs_all=cell(numel(models),1);
-det_scores_all=cell(1,numel(models));
+    [features_all_struct,error_files]=getFeaturesStruct(dir_in,models,ratio);
+    
+    features_all={features_all_struct(:).features_all};
+    empties=cellfun(@isempty,features_all);
+    
+    to_deal=zeros(1,0);
+    det_scores_all={features_all_struct(:).det_scores_all};
+    det_scores_all(empties)={to_deal};
+    
+    sizes=cellfun(@(x) size(x,2),features_all);
+    max_size=max(sizes);
+    features_all=cellfun(@(x) [x,zeros(size(x,1),max_size-size(x,2))],...
+        features_all,'UniformOutput',0);
+    features_all=features_all';
+    
+
+end
 
 
-for model_no=1:numel(models)
-    load(fullfile(dir_in,models{model_no}));
-    
-    feature_vecs_all{model_no}=getFeatures_noOrder(record_lists);
-    
-    %check if record_lists is dpm thresholded
-    accu=record_lists.accuracy;
-    
-    if isfield(record_lists,'dpm_thresh_bin')
-        accu=pruneAccuracyByThresh(record_lists);
+function [features_all_struct,error_files]=getFeaturesStruct(dir_in,models,ratio)
+
+dummy=cell(size(models));
+features_all_struct=struct('features_all',dummy,'det_scores_all',dummy);
+error_files=cell(size(models));
+
+matlabpool open;
+parfor i=1:numel(models)
+%     fprintf('%d\n',i);
+    try
+        temp=load(fullfile(dir_in,models{i}));
+        record_lists=temp.record_lists;
+        features_all_struct(i).features_all=...
+            getFeatures_noOrder(record_lists);
+        
+        accu=record_lists.accuracy;
+        if isfield(record_lists,'dpm_thresh_bin')
+            accu=pruneAccuracyByThresh(record_lists);
+        end
+        features_all_struct(i).det_scores_all=cellfun(@(x) getDetScore(x,ratio),accu);
+        
+    catch err
+        fprintf('error\n');
+        error_files{i}=err.identifier;
     end
-    
-    det_scores_all{model_no}=cellfun(@(x) getDetScore(x,ratio),accu);
 end
-
-
-sizes=cellfun(@(x) size(x,2),feature_vecs_all);
-max_size=max(sizes);
-feature_vecs_all=cellfun(@(x) [x,zeros(size(x,1),max_size-size(x,2))],...
-    feature_vecs_all,'UniformOutput',0);
-
-
-
+matlabpool close;
 
 end
-
 
 function [features_all]=getFeatures_noOrder(record_lists)
 bin_occupied=record_lists.dpm_thresh_bin;
-idx_occupied=find(bin_occupied(2:end));
-
+% idx_occupied=find(bin_occupied(2:end));
+idx_occupied=1:sum(bin_occupied(2:end));
 
 list_idx=find(record_lists.lists_thresh_bin);
 if isempty(list_idx)
@@ -59,7 +77,7 @@ for i=1:numel(list_idx)
 end
 
 features_all=removeUnusedDetections(features_all,record_lists.feature_vecs,cat_nos);
-
+features_all=sparse(features_all);
 
 
 end

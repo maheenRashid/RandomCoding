@@ -6,15 +6,15 @@ ccc
 
 
 dir_parent='/lustre/maheenr/3dgp_results';
-folders={'swap_in_box_auto_refPW'};
+folders={'swap_in_box_auto_new_refPW'};
 
-n=3;
+n=1;
 
 % c_out_folder_pre=['swapAllCombos_unique_' num2str(n)];
 % c_out_folder_post={'_gt_writeFloorOverlap','_auto_writeFloorOverlap'};
 
-% c_out_folder_pre=['swap_in_box_cubeMethod_unique_' num2str(n)];
-% c_out_folder_post={'_auto_writeFloorOverlap'};
+c_out_folder_pre=['swap_in_box_cubeMethod_unique_' num2str(n)];
+c_out_folder_post={'_auto_writeFloorOverlap'};
 
 
 c_file_to_run='writeFloorOverlap';
@@ -32,8 +32,8 @@ script_pruneAllBoxesInfo_Unique;
 fprintf('%s\n','writing top n record text files');
 script_writeTextFiles;
 % text_file_path='dummy';
-fprintf('%s\n','writing cellcommand for floorOverlap');
-script_createFloorOverlapMat;
+% fprintf('%s\n','writing cellcommand for floorOverlap');
+% script_createFloorOverlapMat;
 
 % script_createRenderListsMat;
 % save('folders_for_execute_script.mat','mat_files');

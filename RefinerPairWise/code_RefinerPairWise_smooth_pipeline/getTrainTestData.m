@@ -4,18 +4,23 @@ if nargin<5
 end
 
 %create test/train data
+keyboard
 test_data.X = cell2mat(feature_vecs_all(test_idx));
 test_data.y = cell2mat(det_scores_all(test_idx))';
 train_data.X=cell2mat(feature_vecs_all(train_idx));
 train_data.y=cell2mat(det_scores_all(train_idx))';
 
-train_data.X=normr(train_data.X);
-test_data.X=normr(test_data.X);
+% train_data.X=normr(train_data.X);
+% test_data.X=normr(test_data.X);
 
 %scale data
 [train_data, test_data, ~] = scaleSVM(train_data, test_data, train_data, 0, 1);
 
 % get rid of nans and infs
+train_data.X(isnan(train_data.X))=0;
+train_data.X(isinf(train_data.X))=1;
+
+
 test_data.X(isnan(test_data.X))=0;
 test_data.X(isinf(test_data.X))=1;
 

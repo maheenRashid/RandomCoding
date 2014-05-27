@@ -1,4 +1,4 @@
-load(fullfile('..','record_dpm'),'record_dpm');
+% load(fullfile('..','record_dpm'),'record_dpm');
 
 if ~exist(out_dir,'dir')
     mkdir(out_dir);

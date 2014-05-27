@@ -12,14 +12,20 @@ c_out_folder_pre=['swapAllCombos_unique_' num2str(n)];
 c_out_folder_post={'_gt_writeFloorOverlap','_auto_writeFloorOverlap'};
 c_file_to_run='writeFloorOverlap';
 
+
+dir_parent='/lustre/maheenr/3dgp_results';
+folders={'swap_in_box_auto_new_listsScores_1'};
+
 for folder_no=1
 %         :numel(folders)
     folder=folders{folder_no};
 %     script_creatingDPMBinPerList;
 %     fprintf('%s\n','creating feature vecs list');
-%     script_getFeatureVecs_withCat;
-    fprintf('%s\n','saving test train data LOO');
-    script_saveTestTrainData_LOO_withCat;
+
+    in_dir=[folder '_html'];
+    script_getFeatureVecs_withCat;
+%     fprintf('%s\n','saving test train data LOO');
+%     script_saveTestTrainData_LOO_withCat;
     
 %     k=nan(1);
 %     fprintf('%s %d %s\n','getting ',k,' nearest neighbours');

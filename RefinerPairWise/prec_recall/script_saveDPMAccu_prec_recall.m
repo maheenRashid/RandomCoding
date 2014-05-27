@@ -1,26 +1,38 @@
 
-load(fullfile('..','record_dpm'));
+% load(fullfile('..','record_dpm'));
 
 
 models=dir(fullfile(dir_result,'*.mat'));
 models={models(:).name};
+numel(models)
 
 if ~exist(out_dir,'dir')
     mkdir(out_dir);
 end
 
+% matlabpool open;
+% par
 for model_no=1:numel(models)
-    
+    fprintf('%d\n',model_no);
     mod_name=models{model_no};
+%     mod_name='b#bedroom#sun_aacglewqjbbpfkan.mat';
+    out_mutex=fullfile(out_dir,mod_name(1:end-4));
+    if ~exist(out_mutex,'dir')
+        mkdir(out_mutex)
+    else
+        continue
+    end
     
     out_file_name=fullfile(out_dir,mod_name);
-%     if exist(out_file_name,'file')
-%         continue;
-%     end
-    
-    load(fullfile(dir_feature_vec,mod_name))
-    record_lists_fl=record_lists;
-    load (fullfile(dir_result,mod_name));
+    try
+    temp=load(fullfile(dir_feature_vec,mod_name));
+    catch
+        fprintf('CONTINUING\n');
+        continue;
+    end
+    record_lists_fl=temp.record_lists;
+    temp=load (fullfile(dir_result,mod_name));
+    record_lists=temp.record_lists;
     
     %get best list idx
     best_gt=record_lists.best_list_idx_gt;
@@ -42,6 +54,9 @@ for model_no=1:numel(models)
     total_gt=record_dpm(idx).total_gt;
     
     dpm_bin=record_lists_fl.accuracy;
+    if isempty(dpm_bin)
+        continue;
+    end
     dpm_bin=dpm_bin{1};
     dpm_bin=dpm_bin(:,2);
     dpm_bin=dpm_bin(record_lists_fl.dpm_thresh_bin(2:end));
@@ -61,5 +76,6 @@ for model_no=1:numel(models)
     record_accuracy.obj_map=obj_map;
     record_accuracy.dpm_bin=dpm_bin;
     
-    save(out_file_name,'record_accuracy');
+    parsave_accu(out_file_name,record_accuracy);
 end
+% matlabpool close;

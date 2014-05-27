@@ -1,12 +1,20 @@
 ccc
-
+% return
 dir_parent='/lustre/maheenr/results_temp_09_13';
 folders={'swapObjectsInBox_allOffsets_sizeComparison_bugFixed_gt_refPW',...
     'swapObjectsInBox_allOffsets_sizeComparison_bugFixed_refPW'};
 
+
+rec_path='/lustre/maheenr/new_3dgp/indoorunderstanding_3dgp-master';
+
 folder_type={'gt','auto'};
 
 n=3;
+
+
+dir_parent='/lustre/maheenr/3dgp_results';
+folders={'swap_in_box_auto_listsScores_1'};
+
 
 feature_pre='record_lists_feature_vecs_withCat';
 prctile_pre='by_prec_withCat_noOrder';
@@ -17,9 +25,13 @@ for folder_no=1
 %     :numel(folders)
     folder=folders{folder_no};
     
-    in_dir=['swapAllCombos_unique_' num2str(n) '_' folder_type{folder_no} ...
-        '_writeAndScoreLists_html'];
-    
+%     in_dir=['swapAllCombos_unique_' num2str(n) '_' folder_type{folder_no} ...
+%         '_writeAndScoreLists_html'];
+
+%     in_dir=['swapAllCombos_unique_' num2str(n) '_' folder_type{folder_no} ...
+%         '_writeAndScoreLists_html'];
+    in_dir=[folder '_html'];
+
     %create percentile strings and in out dirs
     feature_dir=fullfile(dir_parent,in_dir,feature_pre);
     
@@ -38,41 +50,50 @@ for folder_no=1
     
     fprintf('%s\n','getting thresholded feature vecs');
 %     script_getThresholdedFeatureVecs;
-    
+%     return
     compiled_dirs=cell(1,numel(prctile_str));
     %loop over each percentiles features
     for feature_no=1:numel(prctile_str)
         fprintf('%s\n',...
             ['save whitened training data ' ...
             prctile_str{feature_no} ' percentile']);
+%         dir_feature_vec=fullfile(dir_parent,in_dir,...
+%             [feature_pre '_' prctile_str_temp{feature_no}]);
         dir_feature_vec=fullfile(dir_parent,in_dir,...
-            [feature_pre '_' prctile_str_temp{feature_no}]);
+            [feature_pre '_' prctile_str{feature_no}]);
+        
         out_dir=fullfile(dir_parent,in_dir,...
             ['testTrainData_LOO_ratioEqual_' prctile_str{feature_no}]);
-                script_saveTestTrainData_LOO_new;
+%                 script_saveTestTrainData_LOO_new;
 
         fprintf('%s\n',...
             ['do linReg ' prctile_str{feature_no} ' percentile']);
         dir_nn_loo=out_dir;
         out_dir=fullfile(dir_parent,in_dir,...
             ['results_linReg_LOO_ratioEqual_' prctile_str{feature_no}]);
-                script_linReg_ratioEqual_prec_recall;
-        
+%                 script_linReg_ratioEqual_prec_recall;
+         
+                
         fprintf('%s\n',...
             ['get dpm accu ' prctile_str{feature_no} ' percentile']);
         dir_result=out_dir;
         out_dir=fullfile(dir_parent,in_dir,...
             ['dpm_accu_per_mod_linReg_' prctile_str{feature_no}]);
-                script_saveDPMAccu_prec_recall;
+        
+        
+            load (fullfile(rec_path,'record_dpm_with_dets_room.mat'));
+        
+%         script_saveDPMAccu_prec_recall;
                 
         fprintf('%s\n',...
             ['compile prec recall ' prctile_str{feature_no} ' percentile']);
         dir_dpm_accu=out_dir;
         out_dir=fullfile(dir_parent,in_dir,...
             ['dpm_accu_compiled_linReg_' prctile_str{feature_no}]);
-                script_compileDPMAccu_prec_recall;
+%                 script_compileDPMAccu_prec_recall;
         
         compiled_dirs{feature_no}=out_dir;
+%         return
     end
     
     fprintf('%s\n','create prec recall curves');

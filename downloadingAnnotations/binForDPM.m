@@ -29,7 +29,7 @@ end
 
 record=[record;cell(2,size(record,2))];
 
-show=0;
+show=1;
 im_dir='../writingDpmFiles/gt_models';
 errorLog=zeros(1,0);
 % 47    48    49    50    51
@@ -109,4 +109,4 @@ end
 
 % save('test_dpm.mat','record','record_labelMe','errorLog');
 
-save('dpm_greater_-1_bbox_record_withDetections.mat','record','record_labelMe','errorLog');
+% save('dpm_greater_-1_bbox_record_withDetections.mat','record','record_labelMe','errorLog');

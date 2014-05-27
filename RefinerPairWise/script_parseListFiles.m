@@ -1,6 +1,7 @@
 ccc
 dir_parent='/home/maheenr/results_temp_09_13';
-folder='swapAllCombos_unique_10_gt_writeAndScoreLists';
+% folder='swapAllCombos_unique_10_gt_writeAndScoreLists';
+folder='swapAllCombos_unique_10_auto_writeAndScoreLists';
 
 out_dir=fullfile(dir_parent,[folder '_html'],'record_lists');
 if ~exist(out_dir,'dir')
